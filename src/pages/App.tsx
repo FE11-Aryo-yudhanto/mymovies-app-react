@@ -1,106 +1,97 @@
 import React, { Component } from 'react'
+import axios from 'axios'
+
 import Card from '../components/Card'
+import Carousel from '../components/Carousel'
 import Layout from '../components/Layout'
 import Loader from '../components/Loader'
 
 interface DatasType {
   id: number
   title: string
-  image: string
+  poster_path: string
   overview: string
 }
 
-export class App extends Component {
-  state = {
-    datas: [],
-    loading: true,
-  };
+interface Propstype { }
+
+interface StateType {
+  loading: boolean
+  datas: DatasType[]
+}
+
+export class App extends Component<Propstype, StateType> {
+  constructor(props: Propstype) {
+    super(props)
+    this.state = {
+      datas: [],
+      loading: true,
+    }
+  }
 
   componentDidMount() {
     this.fetchData();
   }
 
   fetchData() {
-    setTimeout(() => {
-      this.setState({
-        datas: [
-          {
-            id: 1,
-            title: "The Avengers",
-            image: "https://www.themoviedb.org/t/p/original/tYqp6vEOo8YlVWrYQvt9nyOhsA2.jpg",
-            overview: "Nick Fury is compelled to launch the Avengers Initiative when Loki poses a threat to planet Earth. His squad of superheroes put their minds together to accomplish the task.",
-
-          },
-          {
-            id: 2,
-            title: "Captain America: The Winter Soldier",
-            image: "https://upload.wikimedia.org/wikipedia/id/e/e8/Captain_America_The_Winter_Soldier.jpg",
-            overview: "As Steve Rogers adapts to the complexities of a contemporary world, he joins Natasha Romanoff and Sam Wilson in his mission to uncover the secret behind a deadly, mysterious assassin.",
-          },
-          {
-            id: 3,
-            title: "Captain America: Civil War",
-            image: "https://kanitaandiali.files.wordpress.com/2016/07/civil-war.jpeg",
-            overview: "Friction arises between the Avengers when one group supports the government's decision to implement a law to control their powers while the other opposes it.",
-          },
-          {
-            id: 4,
-            title: "Avengers: Infinity War",
-            image: "https://m.media-amazon.com/images/M/MV5BMjMxNjY2MDU1OV5BMl5BanBnXkFtZTgwNzY1MTUwNTM@._V1_.jpg",
-            overview: "The Avengers must stop Thanos, an intergalactic warlord, from getting his hands on all the infinity stones. However, Thanos is prepared to go to any lengths to carry out his insane plan.",
-          },
-          {
-            id: 5,
-            title: "Avengers: Endgame",
-            image: "https://www.themoviedb.org/t/p/original/pvdwjHFE1Xx4mijiDkc9WYJcDeX.jpg",
-            overview: "After Thanos, an intergalactic warlord, disintegrates half of the universe, the Avengers must reunite and assemble again to reinvigorate their trounced allies and restore balance.",
-          },
-          {
-            id: 6,
-            title: "Spider-Man: No Way Home ",
-            image: "https://cdn1-production-images-kly.akamaized.net/ByfoNPSMTMfPEtHmnQMFhgGP80Y=/640x853/smart/filters:quality(75):strip_icc():format(jpeg)/kly-media-production/medias/3635478/original/025116000_1637133546-253154135_2120128131476179_3401639978712735642_n.jpg",
-            overview: "Spider-Man seeks the help of Doctor Strange to forget his exposed secret identity as Peter Parker. However, Strange's spell goes horribly wrong, leading to unwanted guests entering their universe.",
-          },
-          {
-            id: 7,
-            title: "Doctor Strange in the Multiverse of Madness",
-            image: "https://assets.pikiran-rakyat.com/crop/0x0:0x0/x/photo/2022/04/07/2453686681.jpg",
-            overview: "Doctor Strange teams up with a mysterious teenage girl from his dreams who can travel across multiverses, to battle multiple threats, including other-universe versions of himself, which threaten to wipe out millions across the multiverse.",
-          },
-          {
-            id: 8,
-            title: "Black Panther: Wakanda Forever ",
-            image: "https://lumiere-a.akamaihd.net/v1/images/sumbrk_payoff_1sht_eng_4d993829.jpeg",
-            overview: "Queen Ramonda, Shuri, M'Baku, Okoye and the Dora Milaje fight to protect their nation from intervening world powers in the wake of King T'Challa's death. As the Wakandans strive to embrace their next chapter, the heroes must band together with Nakia and Everett Ross to forge a new path for their beloved kingdom.",
-          },
-        ],
-        loading: false,
-      });
-    }, 3000);
+    axios.get(`now_playing?api_key=${import.meta.env.VITE_API_KEY}&language=en-US&page=1`)
+      .then((data) => {
+        console.log("data:", data)
+        console.log("data:", data.data)
+        const { results } = data.data
+        this.setState({ datas: results })
+        console.log("hasil:", results)
+      }).catch((err) => {
+        console.log("error", err)
+      }).finally(() =>
+        this.setState({ loading: false })
+      )
   }
   render() {
     return (
       <Layout>
+        {!this.state.loading && (
+          <Carousel
+            datas={this.state.datas.slice(0, 9)}
+            content={(data) => (
+              <div
+                className='w-full h-full flex justify-center items-center bg-cover bg-center'
+                style={{
+                  backgroundImage: `linear-gradient(
+                    rgba(0, 0, 0, 0.5),
+                    rgba(0, 0, 0, 0.5)
+                  ), url(https://image.tmdb.org/t/p/original${data.backdrop_path})`,
+                }}
+              >
+                <p className="text-white tracking-widest font-bold break-words text-2xl text-center">
+                  {data.title}
+                </p>
+              </div>
+            )
+            }
+          />
+        )
+        }
         <div className='mx-12 pt-12'>
-                    <h2 className={`font-bold text-2xl text-white`}>Playing Now!!!</h2>
-                </div>
-        <div className='grid grid-cols-4 gap-3'>
+          <h2 className={`font-bold text-2xl text-white`}>Playing Now!!!</h2>
+        </div>
+        <div className='grid grid-cols-1 md:grid-cols-2 md:gap-3 xl:grid-cols-4 xl:gap-3 m-3'>
           {this.state.loading ? (
             <Loader />
           ) : (
-            this.state.datas.map((data: DatasType) => (
+            this.state.datas.map((data) => (
               <Card
-               key={data.id}
-               title={data.title}
-               image={data.image}
-               overview={data.overview.substring(0, 50) + "..." }
-               button1_name="Add To Favorite"
-               button2_name="Details"
-             />
+                key={data.id}
+                title={data.title}
+                image={`https://image.tmdb.org/t/p/original${data.poster_path}`}
+                overview={data.overview.substring(0, 45) + "..."}
+                button1_name="Add To Favorite"
+                button2_name="Details"
+              />
             ))
-          )}          
+          )}
         </div>
-      </Layout>
+      </Layout >
     )
   }
 }

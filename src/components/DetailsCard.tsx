@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 
 interface DatasProps {
-    key: number
     title: string
     image: string
     tagline: string
@@ -20,7 +19,7 @@ interface DatasProps {
 export class DetailsCard extends Component<DatasProps> {
     render() {
         return (
-            <div className="hero min-h-screen bg-base-200 mx-auto items-center" key={this.props.key} >
+            <div className="hero min-h-screen bg-base-200 mx-auto items-center" >
                 <div className='w-full bg-cover bg-center bg-no-repeat' >
                     {/* <img src={this.props.image} className='opacity-40 w-screen' /> */}
                 </div>

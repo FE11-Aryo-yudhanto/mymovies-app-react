@@ -12,7 +12,7 @@ export class Card extends Component<CardProps> {
   render() {
     return (
         <div className="card bg-base-100 shadow-xl image-full mx-10 my-10">
-        <figure><img src={this.props.image} alt="Shoes" /></figure>
+        <figure><img src={this.props.image} alt={this.props.title} /></figure>
         <div className="card-body ">
           <h2 className="card-title text-2xl font-bold">{this.props.title}</h2>
           <p>{this.props.overview}</p>
