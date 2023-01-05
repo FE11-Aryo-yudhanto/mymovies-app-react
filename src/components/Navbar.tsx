@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { Link } from 'react-router-dom'
 
 export class Navbar extends Component {
     render() {
@@ -6,9 +7,9 @@ export class Navbar extends Component {
             <div className="navbar bg-gray-600 shadow-xl sticky top-0 z-50">
                 <div className="flex flex-1">
                     <img src="" alt="" />
-                    <a className="btn btn-ghost normal-case font-bold text-2xl text-white">
-                        Movies
-                        <span className='text-red-900 ml-2 text-3xl font-bold'>21</span> </a>
+                    <Link to="/" className="btn btn-ghost normal-case font-bold text-2xl text-white hover:text-white">
+                        Movies<span className='text-red-900 ml-2 text-3xl font-bold'>21</span>
+                    </Link>
                 </div>
                 <div className="flex flex-1 justify-center">
                     <div className="form-control mr-5 w-full hidden md:flex">
@@ -18,8 +19,8 @@ export class Navbar extends Component {
                 <div className='flex flex-1 justify-end'>
                     <div className="flex-none">
                         <ul className="menu menu-horizontal p-0">
-                            <li ><a>Home</a></li>
-                            <li ><a>Favorite</a></li>
+                            <li ><Link to="/" className=' hover:text-white'>Home</Link></li>
+                            <li ><Link to="/favorites" className=' hover:text-white'>Favorite</Link></li>
                         </ul>
                     </div>
                     <label className="swap swap-rotate mr-5">
@@ -35,14 +36,12 @@ export class Navbar extends Component {
                         </label>
                         <ul tabIndex={0} className="mt-3 p-2 shadow-xl menu menu-compact dropdown-content bg-base-200 rounded-box w-52">
                             <li className="text-white hover:bg-white hover:text-black">
-                                <a>
-                                    Profile
-                                    <span className="ml-14 badge bg-base-200 text-white">New</span>
-                                </a>
+                                    <p >Profile
+                                    <span className="ml-14 badge bg-base-200 text-white">New</span></p> 
                             </li>
-                            <li className="text-white hover:bg-white hover:text-black"><a>Dark Mode: </a></li>
-                            <li className="text-white hover:bg-white hover:text-black"><a>Settings</a></li>
-                            <li className="text-white hover:bg-white hover:text-black"><a>Logout</a></li>
+                            <li className="text-white hover:bg-white hover:text-black"><p >Dark Mode:</p> </li>
+                            <li className="text-white hover:bg-white hover:text-black"><p >Settings</p> </li>
+                            <li className="text-white hover:bg-white hover:text-black"><p >Logout</p> </li>
                         </ul>
                     </div>
                 </div>

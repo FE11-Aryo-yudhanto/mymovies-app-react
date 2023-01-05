@@ -2,13 +2,7 @@ import React, { Component } from 'react'
 import Card from '../components/Card'
 import Layout from '../components/Layout'
 import Loader from '../components/Loader'
-
-interface DatasType {
-  id: number
-  title: string
-  image: string
-  overview: string
-}
+import { DatasType,  } from '../utils/types/movie'
 
 interface Propstype { }
 
@@ -17,7 +11,7 @@ interface StateType {
   datas: DatasType[]
 }
 
-export class Favorite extends Component<Propstype, StateType> {
+export default class Favorite extends Component<Propstype, StateType> {
   constructor(props: Propstype) {
     super(props)
     this.state = {
@@ -32,38 +26,20 @@ export class Favorite extends Component<Propstype, StateType> {
   }
 
   fetchData() {
-    setTimeout(() => {
-      this.setState({
-        datas: [
-          {
-            id: 4,
-            title: "Avengers: Infinity War",
-            image: "https://m.media-amazon.com/images/M/MV5BMjMxNjY2MDU1OV5BMl5BanBnXkFtZTgwNzY1MTUwNTM@._V1_.jpg",
-            overview: "The Avengers must stop Thanos, an intergalactic warlord, from getting his hands on all the infinity stones. However, Thanos is prepared to go to any lengths to carry out his insane plan.",
-          },
-          {
-            id: 5,
-            title: "Avengers: Endgame",
-            image: "https://www.themoviedb.org/t/p/original/pvdwjHFE1Xx4mijiDkc9WYJcDeX.jpg",
-            overview: "After Thanos, an intergalactic warlord, disintegrates half of the universe, the Avengers must reunite and assemble again to reinvigorate their trounced allies and restore balance.",
-          },
-          {
-            id: 7,
-            title: "Doctor Strange in the Multiverse of Madness",
-            image: "https://assets.pikiran-rakyat.com/crop/0x0:0x0/x/photo/2022/04/07/2453686681.jpg",
-            overview: "Doctor Strange teams up with a mysterious teenage girl from his dreams who can travel across multiverses, to battle multiple threats, including other-universe versions of himself, which threaten to wipe out millions across the multiverse.",
-          },
-          {
-            id: 8,
-            title: "Black Panther: Wakanda Forever ",
-            image: "https://lumiere-a.akamaihd.net/v1/images/sumbrk_payoff_1sht_eng_4d993829.jpeg",
-            overview: "Queen Ramonda, Shuri, M'Baku, Okoye and the Dora Milaje fight to protect their nation from intervening world powers in the wake of King T'Challa's death. As the Wakandans strive to embrace their next chapter, the heroes must band together with Nakia and Everett Ross to forge a new path for their beloved kingdom.",
-          },
-        ],
-        loading: false,
-      });
-    }, 3000);
+    const getFavMovie = localStorage.getItem("FavMovie")
+    if(getFavMovie){
+      this.setState({datas: JSON.parse(getFavMovie)})
+    }
+    this.setState({ loading: false });
   }
+
+  removeFavMovie(data: DatasType){
+    let dupeDatas: DatasType[] = this.state.datas.slice()
+    const filterData = dupeDatas.filter((item) => item.id !== data.id)
+    localStorage.setItem("FavMovie", JSON.stringify(filterData))
+    alert(`Delete ${data.title} from favorite list`);
+  }
+
   render() {
     return (
       <Layout>
@@ -76,12 +52,13 @@ export class Favorite extends Component<Propstype, StateType> {
           ) : (
             this.state.datas.map((data) => (
               <Card
+                id={data.id}
                 key={data.id}
                 title={data.title}
-                image={data.image}
+                image={`https://image.tmdb.org/t/p/original${data.poster_path}`}
                 overview={data.overview.substring(0, 50) + "..."}
-                button1_name="Add To Favorite"
-                button2_name="Details"
+                button1_name="Delete From Favorite"
+                onClickFav={() => this.removeFavMovie(data)}
               />
             ))
           )}
@@ -90,5 +67,3 @@ export class Favorite extends Component<Propstype, StateType> {
     )
   }
 }
-
-export default Favorite
