@@ -10,7 +10,7 @@ interface LayoutProps {
 }
 const Layout: FC<LayoutProps> = ({ children, onChangeSearch, onSubmitSearch, onclickSearch }) => {
   return (
-    <div className='w-screen h-screen bg-base-200 flex flex-col overflow-auto'>
+    <div className='w-screen h-screen bg-base-200 flex flex-col overflow-auto dark:bg-white'>
       <Navbar onChangeSearch={onChangeSearch} onSubmitSearch={onSubmitSearch} onclickSearch={onclickSearch}/>
       <div className="h-full overflow-auto">{children}</div>
       <Footer />

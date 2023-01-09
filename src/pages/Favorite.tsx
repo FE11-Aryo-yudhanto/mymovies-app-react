@@ -4,8 +4,10 @@ import { DatasType, } from '../utils/types/movie'
 import Layout from '../components/Layout'
 import Loader from '../components/Loader'
 import Card from '../components/Card'
+import { useTitle } from '../utils/hooks/customHooks'
 
 const Favorite = () => {
+  useTitle("Movie21 - Your Favorite Movie")
   const [datas, setDatas] = useState<DatasType[]>([])
   const [loading, setLoading] = useState<boolean>(true)
 

@@ -7,13 +7,15 @@ import { withRouter } from "../utils/navigation";
 import Layout from '../components/Layout'
 import Loader from '../components/Loader'
 import Button from '../components/Button';
+import { useTitle } from '../utils/hooks/customHooks'
 
 
 const Details = () => {
-    const [datas, setdatass] = useState<DetailsdatasType>({})
+    const [datas, setDatas] = useState<DetailsdatasType>({})
     const [loading, setLoading] = useState<boolean>(true)
     const { id_movie } = useParams()
     const navigate = useNavigate()
+    useTitle(`${datas.title} - Cinephile`)
 
 
     useEffect(() => {
@@ -24,7 +26,7 @@ const Details = () => {
         axios.get(`${id_movie}?api_key=${import.meta.env.VITE_API_KEY}&language=en-US`)
             .then((datas) => {
                 const { data } = datas
-                setdatass(data)
+                setDatas(data)
             }).catch((err) => {
             }).finally(() =>
                 setLoading(false)
@@ -40,7 +42,7 @@ const Details = () => {
                 {loading ? (
                     <Loader />
                 ) : (
-                    <div className="hero min-h-screen bg-base-200 mx-auto items-center">
+                    <div className="hero min-h-screen bg-base-200 dark:bg-white dark:text-black mx-auto items-center">
                         <div className='w-full bg-cover bg-center bg-no-repeat' >
                             <img src={`https://image.tmdb.org/t/p/w500${datas.backdrop_path}`} className='opacity-40 w-screen' />
                         </div>

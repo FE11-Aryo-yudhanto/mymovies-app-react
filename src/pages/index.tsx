@@ -6,8 +6,10 @@ import Carousel from '../components/Carousel'
 import Layout from '../components/Layout'
 import Loader from '../components/Loader'
 import Card from '../components/Card'
+import { useTitle } from '../utils/hooks/customHooks'
 
 const App = () => {
+  useTitle("Movie21 - Now Playing Movie")
   const [loading, setLoading] = useState<boolean>(true)
   const [totalPage, setTotalPage] = useState<number>(1)
   const [search, setSeacrh] = useState<string>("")
@@ -25,7 +27,7 @@ const App = () => {
       }).finally(() =>
         setLoading(false))
   }
-  
+
   console.log('search key', search)
   // function searchMovie() {
   //   axios.get(`https://api.themoviedb.org/3/movie/search/movie?api_key=${import.meta.env.VITE_API_KEY}&language=en-US&query=${search}&page=1&include_adult=false`)
@@ -76,9 +78,9 @@ const App = () => {
 
   return (
     <Layout
-      // onChangeSearch={(e) => setSeacrh(e.target.value)}
-      // onSubmitSearch={() => searchMovie()}
-      // onclickSearch={() => searchMovie()}
+    // onChangeSearch={(e) => setSeacrh(e.target.value)}
+    // onSubmitSearch={() => searchMovie()}
+    // onclickSearch={() => searchMovie()}
     >
       {!loading && (
         <Carousel
@@ -103,7 +105,7 @@ const App = () => {
       )
       }
       <div className='mx-12 pt-12'>
-        <h2 className={`font-bold text-2xl text-white`}>Playing Now!!!</h2>
+        <h2 className={`font-bold text-2xl text-white dark:text-black`}>Playing Now!!!</h2>
       </div>
       <div className='grid grid-cols-1 md:grid-cols-2 md:gap-3 xl:grid-cols-4 xl:gap-3 m-3'>
         {loading ? (
@@ -124,15 +126,15 @@ const App = () => {
       </div>
       <div className="btn-group w-full justify-center">
         <button
-          className="btn"
+          className="btn bg-base-100 text-white"
           onClick={() => prevPage()}
           disabled={page === 1}
         >
           «
         </button>
-        <button className="btn normal-case">Page {page}</button>
+        <button className="normal-case bg-base-100 text-white rounded-none">Page {page}</button>
         <button
-          className="btn"
+          className="btn bg-base-100 text-white"
           onClick={() => nextPage()}
           disabled={page === totalPage}
         >
