@@ -93,7 +93,7 @@ const App = () => {
           datas={datas.slice(0, 9)}
           content={(data) => (
             <div
-              className='w-full h-full flex justify-center items-center bg-cover bg-center'
+              className='w-full h-full flex justify-center items-center bg-cover bg-center dark:opacity-90'
               style={{
                 backgroundImage: `linear-gradient(
                     rgba(0, 0, 0, 0.5),
