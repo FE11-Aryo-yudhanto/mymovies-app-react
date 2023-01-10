@@ -2,12 +2,12 @@ import { useState, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import axios from 'axios'
 
-import { DetailsdatasType } from '../utils/types/movie'
-import { withRouter } from "../utils/navigation";
-import Layout from '../components/Layout'
-import Loader from '../components/Loader'
-import Button from '../components/Button';
-import { useTitle } from '../utils/hooks/customHooks'
+import { DetailsdatasType } from 'utils/types/movie'
+import { withRouter } from "utils/navigation";
+import Layout from 'components/Layout'
+import Loader from 'components/Loader'
+import Button from 'components/Button';
+import { useTitle } from 'utils/hooks/customHooks'
 
 
 const Details = () => {

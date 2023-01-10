@@ -1,32 +1,35 @@
+import { useSelector, useDispatch } from 'react-redux'
 import { useState, useEffect } from 'react'
 
-import { DatasType, } from '../utils/types/movie'
-import Layout from '../components/Layout'
-import Loader from '../components/Loader'
-import Card from '../components/Card'
-import { useTitle } from '../utils/hooks/customHooks'
+import Layout from 'components/Layout'
+import Loader from 'components/Loader'
+import Card from 'components/Card'
+
+import { setFavorites } from 'utils/redux/reducers/reducer'
+import { useTitle } from 'utils/hooks/customHooks'
+import { DatasType, } from 'utils/types/movie'
+import { RootState } from 'utils/types/redux'
 
 const Favorite = () => {
   useTitle("Movie21 - Your Favorite Movie")
-  const [datas, setDatas] = useState<DatasType[]>([])
+  const dispatch = useDispatch()
+  const datas = useSelector((state: RootState) => state.data.favorites)
   const [loading, setLoading] = useState<boolean>(true)
 
   useEffect(() => {
-    fetchData()
+    loadingPage()
   }, [])
 
-  function fetchData() {
-    const getFavMovie = localStorage.getItem("FavMovie")
-    if (getFavMovie) {
-      setDatas(JSON.parse(getFavMovie))
-    }
+  function loadingPage() {
     setLoading(false);
   }
 
   function removeFavMovie(data: DatasType) {
     let dupeDatas: DatasType[] = datas.slice()
     const filterData = dupeDatas.filter((item) => item.id !== data.id)
+
     localStorage.setItem("FavMovie", JSON.stringify(filterData))
+    dispatch(setFavorites(filterData))
     alert(`Delete ${data.title} from favorite list`);
   }
 

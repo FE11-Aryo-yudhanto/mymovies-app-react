@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom'
 import { FC } from 'react'
 import { useContext } from 'react'
 
-import { ThemeContext } from '../utils/context'
+import { ThemeContext } from 'utils/context'
 
 interface NavbarProps {
     onSubmitSearch?: () => void

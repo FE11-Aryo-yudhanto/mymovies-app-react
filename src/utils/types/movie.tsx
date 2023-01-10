@@ -3,7 +3,6 @@ export interface DatasType {
   title: string
   poster_path: string
   overview: string
-  navigate?: any;
 }
 
 type GenreType = {
@@ -31,5 +30,4 @@ export interface DetailsdatasType {
   budget?: number
   revenue?: number
   overview?: string
-
 }

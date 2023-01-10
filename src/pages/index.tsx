@@ -1,15 +1,19 @@
 import { useEffect, useState } from 'react'
+import { useDispatch } from 'react-redux'
 import axios from 'axios'
 
-import { DatasType } from '../utils/types/movie'
-import Carousel from '../components/Carousel'
-import Layout from '../components/Layout'
-import Loader from '../components/Loader'
-import Card from '../components/Card'
-import { useTitle } from '../utils/hooks/customHooks'
+import Carousel from 'components/Carousel'
+import Layout from 'components/Layout'
+import Loader from 'components/Loader'
+import Card from 'components/Card'
+
+import { setFavorites } from 'utils/redux/reducers/reducer'
+import { useTitle } from 'utils/hooks/customHooks'
+import { DatasType } from 'utils/types/movie'
 
 const App = () => {
   useTitle("Movie21 - Now Playing Movie")
+  const dispatch = useDispatch()
   const [loading, setLoading] = useState<boolean>(true)
   const [totalPage, setTotalPage] = useState<number>(1)
   const [search, setSeacrh] = useState<string>("")
@@ -62,6 +66,7 @@ const App = () => {
       let parseFav: DatasType[] = JSON.parse(checkExist);
       parseFav.push(data);
       localStorage.setItem("FavMovie", JSON.stringify(parseFav));
+      dispatch(setFavorites(parseFav))
       alert("Movie added to favorite");
     } else {
       localStorage.setItem("FavMovie", JSON.stringify([data]));
@@ -72,6 +77,7 @@ const App = () => {
   useEffect(() => {
     fetchData(1)
   }, [])
+
   // useEffect(() => {
   //   searchMovie()
   // }, [])
