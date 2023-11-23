@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
+import Swal from "sweetalert2";
 import axios from 'axios'
 
 import Carousel from 'components/Carousel'
@@ -32,7 +33,6 @@ const App = () => {
         setLoading(false))
   }
 
-  console.log('search key', search)
   // function searchMovie() {
   //   axios.get(`https://api.themoviedb.org/3/movie/search/movie?api_key=${import.meta.env.VITE_API_KEY}&language=en-US&query=${search}&page=1&include_adult=false`)
   //     .then((data) => {
@@ -64,13 +64,98 @@ const App = () => {
       terlebih dahulu apakah film yang dipilih sudah ditambahkan atau belum, kasih alert jika ada, jika tidak silahkan push datanya ke localstorage
       */
       let parseFav: DatasType[] = JSON.parse(checkExist);
-      parseFav.push(data);
-      localStorage.setItem("FavMovie", JSON.stringify(parseFav));
-      dispatch(setFavorites(parseFav))
-      alert("Movie added to favorite");
+      if(parseFav.length === 0){
+        Swal.fire({
+          title: "Warning",
+          text: "Add "+data.title+" to favorite?",
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonColor: "#3085d6",
+          confirmButtonText: "Yes",
+          cancelButtonColor: "#d33",
+          cancelButtonText: "No",
+        }).then((result) => {
+          if (result.isConfirmed) {
+            parseFav.push(data);
+            localStorage.setItem("FavMovie", JSON.stringify(parseFav));
+            dispatch(setFavorites(parseFav))
+            Swal.fire({
+              title: "Success",
+              position: "center",
+              icon: "success",
+              text: "Add successfully",
+              showConfirmButton: false,
+              timer: 1500,
+            });
+          }
+        });
+      }else{
+        let check = false;
+
+        parseFav.map((item)=>{
+          if(item.id === data.id){
+            check = true;
+          }
+        })
+        if(!check){
+          Swal.fire({
+            title: "Warning",
+            text: "Add "+data.title+" to favorite?",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            confirmButtonText: "Yes",
+            cancelButtonColor: "#d33",
+            cancelButtonText: "No",
+          }).then((result) => {
+            if (result.isConfirmed) {
+              parseFav.push(data);
+              localStorage.setItem("FavMovie", JSON.stringify(parseFav));
+              dispatch(setFavorites(parseFav))
+              Swal.fire({
+                title: "Success",
+                position: "center",
+                icon: "success",
+                text: "Add successfully",
+                showConfirmButton: false,
+                timer: 1500,
+              });
+            }
+          });
+        }else{
+          Swal.fire({
+            title: "Error",
+            position: "center",
+            icon: "error",
+            text: data.title+" already in favorite",
+            showConfirmButton: false,
+            timer: 1500,
+          });
+        }
+      }
+      
     } else {
-      localStorage.setItem("FavMovie", JSON.stringify([data]));
-      alert("Movie added to favorite");
+      Swal.fire({
+        title: "Warning",
+        text: "Add "+data.title+" to favorite?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        confirmButtonText: "Yes",
+        cancelButtonColor: "#d33",
+        cancelButtonText: "No",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          localStorage.setItem("FavMovie", JSON.stringify([data]));
+          Swal.fire({
+            position: "center",
+            icon: "success",
+            text: "Add successfully",
+            showConfirmButton: false,
+            timer: 1500,
+          });
+        }
+      });
     }
   }
 

@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react'
 
 import Layout from 'components/Layout'
 import Loader from 'components/Loader'
+import Swal from "sweetalert2";
 import Card from 'components/Card'
 
 import { setFavorites } from 'utils/redux/reducers/reducer'
@@ -27,10 +28,29 @@ const Favorite = () => {
   function removeFavMovie(data: DatasType) {
     let dupeDatas: DatasType[] = datas.slice()
     const filterData = dupeDatas.filter((item) => item.id !== data.id)
-
-    localStorage.setItem("FavMovie", JSON.stringify(filterData))
-    dispatch(setFavorites(filterData))
-    alert(`Delete ${data.title} from favorite list`);
+    Swal.fire({
+      title: "Warning",
+      text: "Delete "+data.title+" from favorite?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      confirmButtonText: "Yes",
+      cancelButtonColor: "#d33",
+      cancelButtonText: "No",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        localStorage.setItem("FavMovie", JSON.stringify(filterData))
+        dispatch(setFavorites(filterData))
+        Swal.fire({
+          title: "Success",
+          position: "center",
+          icon: "success",
+          text: "Delete successfully",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+      }
+    });
   }
 
   return (
