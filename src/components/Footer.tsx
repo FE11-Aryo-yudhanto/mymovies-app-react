@@ -10,7 +10,7 @@ const Footer = () => {
           </p>
         </Link>
         <div className='w-full'>
-          <p className='text-right mr-4'>Copyright Movie 21 © 2022 - All right reserved</p>
+          <p className='text-right mr-4'>Copyright Movie 21 © {new Date().getFullYear()} - All right reserved</p>
         </div>
       </div>
     </footer>

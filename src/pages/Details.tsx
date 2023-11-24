@@ -1,13 +1,16 @@
-import { useState, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
+import { useState, useEffect } from 'react'
+import { enUS } from 'date-fns/locale';
+import { format } from 'date-fns';
+import ISO6391 from 'iso-639-1'
 import axios from 'axios'
 
 import { DetailsdatasType } from 'utils/types/movie'
+import { useTitle } from 'utils/hooks/customHooks'
 import { withRouter } from "utils/navigation";
+import Button from 'components/Button';
 import Layout from 'components/Layout'
 import Loader from 'components/Loader'
-import Button from 'components/Button';
-import { useTitle } from 'utils/hooks/customHooks'
 
 
 const Details = () => {
@@ -36,6 +39,14 @@ const Details = () => {
         navigate(`/`);
     }
 
+    function formatDate(dateString: string) {
+        if (!dateString) return '';
+        const formattedDate = format(new Date(dateString), 'MMMM d, yyyy', {
+            locale: enUS, 
+        });
+        return formattedDate;
+      }
+
     return (
         <Layout>
             <div className=''>
@@ -54,11 +65,10 @@ const Details = () => {
                                     <p className='pt-2 text-lg font-semibold'><span className='text-lg font-normal italic'>{datas.tagline}</span></p> <br />
                                     <p className='pt-2 text-lg font-semibold'>Ratings:{" "}
                                         <span className='text-lg font-normal'>
-                                            {/* {datas.vote_average.toFixed(1)} */}
-                                            {datas.vote_average}
+                                            {datas.vote_average?.toFixed(1)}
                                         </span>
                                     </p>
-                                    <p className='pt-1 text-lg font-semibold'>Release: <span className='text-lg font-normal'>{datas.release_date}</span></p>
+                                    <p className='pt-1 text-lg font-semibold'>Release: <span className='text-lg font-normal'>{datas.release_date? (formatDate(datas.release_date)) : ("")}</span></p>
                                     <p className='pt-1 text-lg font-semibold'>Genre:{" "}
                                         <span className='text-lg font-normal'>
                                             {
@@ -70,11 +80,10 @@ const Details = () => {
                                     </p>
                                     <p className='pt-1 text-lg font-semibold'>Runtime:{" "}
                                         <span className='text-lg font-normal'>
-                                            {/* {Math.floor(datas.runtime / 60) + ` Hours ` + Math.floor(datas.runtime % 60) + ` Minutes.`} */}
-                                            {datas.runtime} s
+                                            {datas.runtime !== undefined ? (Math.floor(datas.runtime / 60) + ` Hours ` + Math.floor(datas.runtime % 60) + ` Minutes.`) : ("N/A")}
                                         </span>
                                     </p>
-                                    <p className='pt-1 text-lg font-semibold'>Languange: <span className='text-lg font-normal'>{datas.original_language}</span></p>
+                                    <p className='pt-1 text-lg font-semibold'>Languange: <span className='text-lg font-normal'>{datas.original_language? (ISO6391.getName(datas.original_language)) : ("")}</span></p>
                                     <p className='pt-1 text-lg font-semibold'>Popularity: <span className='text-lg font-normal'>{datas.popularity}</span></p>
                                     <p className='pt-1 text-lg font-semibold'>Production: <span className='text-lg font-normal'>
                                         {
@@ -86,14 +95,12 @@ const Details = () => {
                                     </p>
                                     <p className='pt-1 text-lg font-semibold'>Budget:{" "}
                                         <span className='text-lg font-normal'>
-                                            {/* {new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" }).format(datas.budget)} */}
-                                            {datas.budget}
+                                            {datas.budget? (new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" }).format(datas.budget)) : (0)}
                                         </span>
                                     </p>
                                     <p className='pt-1 text-lg font-semibold'>Revenue:{" "}
                                         <span className='text-lg font-normal'>
-                                            {/* {new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" }).format(datas.revenue)} */}
-                                            {datas.revenue}
+                                            {datas.revenue? (new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" }).format(datas.revenue)) : (0)}
                                         </span>
                                     </p><br />
                                     <p className="pt-1 pb-10 text-lg font-semibold">Overview: <br /> <span className='text-lg font-normal'>{datas.overview}</span></p>
